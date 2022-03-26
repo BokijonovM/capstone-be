@@ -9,6 +9,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import JobsModel from "../jobsRouter/schema.js";
+import CompModel from "../companies/schema.js";
 
 const cloudinaryUpload = multer({
   storage: new CloudinaryStorage({
@@ -63,6 +64,46 @@ usersRouter.get("/me/jobs", JWTAuthMiddleware, async (req, res, next) => {
     next(error);
   }
 });
+
+usersRouter.get("/me/jobs/:id", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const jobs = await JobsModel.findById({
+      user: req.user._id.toString(),
+      _id: req.params.id,
+    });
+
+    res.status(200).send(jobs);
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.get("/me/companies", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const jobs = await CompModel.find({ user: req.user._id.toString() });
+
+    res.status(200).send(jobs);
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.get(
+  "/me/companies/:id",
+  JWTAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const jobs = await CompModel.findById({
+        user: req.user._id.toString(),
+        _id: req.params.id,
+      });
+
+      res.status(200).send(jobs);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 usersRouter.post(
   "/me/image",

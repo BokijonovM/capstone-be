@@ -8,7 +8,6 @@ const jobsSchema = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     location: { type: String, required: true },
-    company: { type: String, required: true },
     salary: { type: String },
     experience: {
       type: String,
@@ -28,6 +27,11 @@ const jobsSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
+    },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Company",
     },
   },
   {

@@ -34,7 +34,10 @@ jobsRouter.get("/", async (req, res, next) => {
 
 jobsRouter.post("/", JWTAuthMiddleware, async (req, res, next) => {
   try {
-    const newJob = new JobsModel({ ...req.body, user: req.user._id });
+    const newJob = new JobsModel({
+      ...req.body,
+      user: req.user._id,
+    });
     const { _id } = await newJob.save();
     res.status(201).send(newJob);
   } catch (error) {
@@ -51,6 +54,7 @@ jobsRouter.get("/:id", async (req, res, next) => {
       path: "user",
       select: ["_id", "firstName", "lastName", "role", "email"],
     });
+
     if (job) {
       res.send(job);
     } else {
