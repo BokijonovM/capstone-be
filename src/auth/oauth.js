@@ -7,7 +7,7 @@ const googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: `${process.env.API_URL}/user/googleRedirect`,
+    callbackURL: `${process.env.API_URL}/users/googleRedirect`,
   },
   async (accessToken, refreshToken, profile, passportNext) => {
     try {
