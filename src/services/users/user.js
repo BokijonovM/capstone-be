@@ -8,6 +8,7 @@ import { authenticateUser } from "../../auth/tools.js";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
+import JobsModel from "../jobsRouter/schema.js";
 
 const cloudinaryUpload = multer({
   storage: new CloudinaryStorage({
@@ -53,15 +54,15 @@ usersRouter.delete("/me", JWTAuthMiddleware, async (req, res, next) => {
   }
 });
 
-// usersRouter.get("/me/products", JWTAuthMiddleware, async (req, res, next) => {
-//   try {
-//     const shops = await ProductsModel.find({ user: req.user._id.toString() });
+usersRouter.get("/me/jobs", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const jobs = await JobsModel.find({ user: req.user._id.toString() });
 
-//     res.status(200).send(shops);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    res.status(200).send(jobs);
+  } catch (error) {
+    next(error);
+  }
+});
 
 usersRouter.post(
   "/me/image",
@@ -175,42 +176,5 @@ usersRouter.get(
     }
   }
 );
-
-usersRouter.get("/:userId", adminOnlyMiddleware, async (req, res, next) => {
-  try {
-    const idOfUser = req.params.userId;
-
-    const user = await UsersModel.findById(idOfUser);
-    if (user) {
-      res.send(user);
-    } else {
-      next(createHttpError(404, `User with id ${idOfUser} not found!`));
-    }
-  } catch (error) {
-    next(
-      createHttpError(400, "Some errors occurred in usersRouter body!", {
-        message: error.message,
-      })
-    );
-  }
-});
-
-usersRouter.delete("/:userId", adminOnlyMiddleware, async (req, res, next) => {
-  try {
-    const userID = req.params.userId;
-    const deletedUser = await UsersModel.findByIdAndDelete(userID);
-    if (deletedUser) {
-      res.status(204).send(`User with id ${userID} deleted!`);
-    } else {
-      next(createHttpError(404, `User with id ${userID} not found!`));
-    }
-  } catch (error) {
-    next(
-      createHttpError(400, "Some errors occurred in usersRouter body!", {
-        message: error.message,
-      })
-    );
-  }
-});
 
 export default usersRouter;
