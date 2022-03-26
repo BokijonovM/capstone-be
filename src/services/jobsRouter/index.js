@@ -1,10 +1,8 @@
 import express from "express";
 import createHttpError from "http-errors";
 import JobsModel from "./schema.js";
-import passport from "passport";
 import { adminOnlyMiddleware } from "../../auth/admin.js";
 import { JWTAuthMiddleware } from "../../auth/token.js";
-import { authenticateUser } from "../../auth/tools.js";
 import q2m from "query-to-mongo";
 
 const jobsRouter = express.Router();
@@ -56,7 +54,7 @@ jobsRouter.get("/:id", async (req, res, next) => {
     if (job) {
       res.send(job);
     } else {
-      next(createHttpError(404, `Job with id ${jobId} not found!`));
+      res.send(`Job with id ${jobId} not found!`);
     }
   } catch (error) {
     console.log(error);
@@ -66,6 +64,15 @@ jobsRouter.get("/:id", async (req, res, next) => {
 
 jobsRouter.put("/:id", JWTAuthMiddleware, async (req, res, next) => {
   try {
+    const jobId = req.params.id;
+    const updatedJob = await JobsModel.findByIdAndUpdate(jobId, req.body, {
+      new: true,
+    });
+    if (updatedJob) {
+      res.send(updatedJob);
+    } else {
+      res.send(`Job with id ${jobId} not found!`);
+    }
   } catch (error) {
     console.log(error);
     next(error);
@@ -74,6 +81,13 @@ jobsRouter.put("/:id", JWTAuthMiddleware, async (req, res, next) => {
 
 jobsRouter.delete("/:id", JWTAuthMiddleware, async (req, res, next) => {
   try {
+    const jobId = req.params.id;
+    const deletedJob = await JobsModel.findByIdAndDelete(jobId);
+    if (deletedJob) {
+      res.status(204).send(`Job with id ${jobId} deleted!`);
+    } else {
+      res.send(`Job with id ${jobId} not found!`);
+    }
   } catch (error) {
     console.log(error);
     next(error);

@@ -48,4 +48,4 @@ jobsSchema.static("findJobWithUser", async function (mongoQuery) {
   return { total, jobs };
 });
 
-export default model("Product", jobsSchema);
+export default model("Job", jobsSchema);
