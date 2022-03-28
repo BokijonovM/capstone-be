@@ -150,9 +150,9 @@ usersRouter.post("/login", async (req, res, next) => {
 usersRouter.post("/register", async (req, res, next) => {
   try {
     const newUser = new UsersModel(req.body);
-    const DbRes = await newUser.save({ new: true });
-
-    res.status(200).send(DbRes);
+    const savedUser = await newUser.save();
+    const accessToken = await authenticateUser(savedUser);
+    res.send({ accessToken });
   } catch (error) {
     next(error);
   }
@@ -203,9 +203,13 @@ usersRouter.get(
       console.log(req.user.token);
 
       if (req.user.role === "Admin") {
-        res.redirect(`${process.env.FE_URL}?accessToken=${req.user.token}`);
+        res.redirect(
+          `${process.env.FE_URL}/home?accessToken=${req.user.token}`
+        );
       } else {
-        res.redirect(`${process.env.FE_URL}?accessToken=${req.user.token}`);
+        res.redirect(
+          `${process.env.FE_URL}/home?accessToken=${req.user.token}`
+        );
       }
     } catch (error) {
       console.log(error);
