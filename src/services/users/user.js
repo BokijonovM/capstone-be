@@ -20,6 +20,15 @@ const cloudinaryUpload = multer({
   }),
 }).single("image");
 
+const cloudinaryUploadPdf = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "capstone resume",
+    },
+  }),
+}).single("resume");
+
 const usersRouter = express.Router();
 
 usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
@@ -115,6 +124,31 @@ usersRouter.post(
       const updated = await UsersModel.findByIdAndUpdate(
         userId,
         { image: req.file.path },
+        {
+          new: true,
+        }
+      );
+      if (updated) {
+        res.send(updated);
+      } else {
+        next(createHttpError(404, `User with id ${userId} not found!`));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+usersRouter.post(
+  "/me/resume",
+  JWTAuthMiddleware,
+  cloudinaryUploadPdf,
+  async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      const updated = await UsersModel.findByIdAndUpdate(
+        userId,
+        { myResume: req.file.path },
         {
           new: true,
         }

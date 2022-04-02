@@ -12,6 +12,8 @@ const userSchema = new Schema(
     image: { type: String },
     github: { type: String },
     linkedin: { type: String },
+    aboutMe: { type: String },
+    myResume: { type: String },
     city: { type: String },
     phoneNumber: { type: String },
     role: { type: String, enum: ["User", "Admin"], default: "User" },
