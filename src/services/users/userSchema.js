@@ -17,6 +17,11 @@ const userSchema = new Schema(
     city: { type: String },
     phoneNumber: { type: String },
     role: { type: String, enum: ["User", "Admin"], default: "User" },
+    myExperience: {
+      type: String,
+      enum: ["0-2", "2-4", "4-6", "6+"],
+      default: "0-2",
+    },
     googleId: { type: String },
   },
   {
