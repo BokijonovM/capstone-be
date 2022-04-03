@@ -13,28 +13,6 @@ const comSchema = new Schema(
     banner: { type: String },
     website: { type: String },
     linkedin: { type: String },
-    jobs: [
-      {
-        title: { type: String, required: true },
-        description: { type: String, required: true },
-        location: { type: String, required: true },
-        salary: { type: String },
-        experience: {
-          type: String,
-          enum: ["0-2", "2-4", "4-6", "6+"],
-          default: "0-2",
-        },
-        type: {
-          type: String,
-          enum: ["B2B", "Permanent"],
-          default: "B2B",
-        },
-        techStack: [{ skill: { type: String } }],
-        offers: [{ offer: { type: String } }],
-        responsibilities: [{ responsibility: { type: String } }],
-        requirements: [{ requirement: { type: String } }],
-      },
-    ],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
