@@ -48,7 +48,7 @@ const comSchema = new Schema(
 
 comSchema.static("findCompanyWithUser", async function (mongoQuery) {
   const total = await this.countDocuments(mongoQuery.criteria);
-  const jobs = await this.find(mongoQuery.criteria)
+  const companies = await this.find(mongoQuery.criteria)
     .limit(mongoQuery.options.limit)
     .skip(mongoQuery.options.skip)
     .sort(mongoQuery.options.sort)
@@ -56,7 +56,7 @@ comSchema.static("findCompanyWithUser", async function (mongoQuery) {
       path: "user",
       select: "firstName lastName email role",
     });
-  return { total, jobs };
+  return { total, companies };
 });
 
 export default model("Company", comSchema);
