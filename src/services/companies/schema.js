@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const comSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     location: { type: String, required: true },
     companySize: { type: String },
