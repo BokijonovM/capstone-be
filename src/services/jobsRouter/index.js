@@ -56,6 +56,36 @@ jobsRouter.post("/", JWTAuthMiddleware, async (req, res, next) => {
   }
 });
 
+jobsRouter.get(`/c-search/:value`, async (req, res, next) => {
+  try {
+    const val = req.params.value;
+    const search = await JobsModel.find({ companyName: { $regex: val } });
+    if (search) {
+      res.send(search);
+    } else {
+      console.log("not found");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+jobsRouter.get(`/t-search/:value`, async (req, res, next) => {
+  try {
+    const val = req.params.value;
+    const search = await JobsModel.find({ title: { $regex: val } });
+    if (search) {
+      res.send(search);
+    } else {
+      console.log("not found");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 jobsRouter.get("/:id", async (req, res, next) => {
   try {
     const jobId = req.params.id;

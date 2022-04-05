@@ -51,6 +51,21 @@ companiesRouter.get("/", async (req, res, next) => {
   }
 });
 
+companiesRouter.get(`/search/:value`, async (req, res, next) => {
+  try {
+    const val = req.params.value;
+    const search = await CompanyModel.find({ name: { $regex: val } });
+    if (search) {
+      res.send(search);
+    } else {
+      console.log("not found");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 companiesRouter.post("/", JWTAuthMiddleware, async (req, res, next) => {
   try {
     const newComp = new CompanyModel({
