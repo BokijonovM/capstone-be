@@ -29,6 +29,15 @@ const jobsSchema = new Schema(
       required: true,
       ref: "User",
     },
+    applicants: [
+      {
+        applicant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          unique: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

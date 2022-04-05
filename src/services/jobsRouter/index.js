@@ -11,18 +11,28 @@ jobsRouter.get("/", async (req, res, next) => {
   try {
     const mongoQuery = q2m(req.query);
     const total = await JobsModel.findJobWithUser(mongoQuery);
-    const blogs = await JobsModel.find(mongoQuery.criteria)
+    const jobs = await JobsModel.find(mongoQuery.criteria)
       .populate({
         path: "user",
         select: ["_id", "firstName", "lastName", "role", "email"],
       })
-      .sort(mongoQuery.options.sort)
-      .skip(mongoQuery.options.skip)
-      .limit(mongoQuery.limit);
-    res.send({
-      total,
-      totalPages: Math.ceil(total / mongoQuery.options.limit),
-    });
+      .populate({
+        path: "applicants",
+        populate: {
+          path: "applicant",
+          model: "User",
+          select: [
+            "_id",
+            "firstName",
+            "lastName",
+            "image",
+            "myExperience",
+            "city",
+          ],
+        },
+      })
+      .sort(mongoQuery.options.sort);
+    res.send(jobs);
   } catch (error) {
     next(
       createHttpError(400, "Some errors occurred in jobsRouter body!", {
@@ -95,6 +105,31 @@ jobsRouter.delete("/:id", JWTAuthMiddleware, async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(error);
+  }
+});
+
+jobsRouter.post("/:id/applicants", async (req, res, next) => {
+  try {
+    const updatedProfile = await JobsModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { applicants: req.body } },
+      { new: true }
+    );
+    if (updatedProfile) {
+      res.send(updatedProfile);
+    } else {
+      next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(
+        400,
+        "Some errors occurred in jobsRouter.post experiences body!",
+        {
+          message: error.message,
+        }
+      )
+    );
   }
 });
 
