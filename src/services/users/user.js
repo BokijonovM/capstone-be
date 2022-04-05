@@ -73,6 +73,24 @@ usersRouter.get("/me/jobs", JWTAuthMiddleware, async (req, res, next) => {
     next(error);
   }
 });
+// {applicants:{$elemMatch: {applicant : ObjectId('623eb3e32079c1ace4ae3473')}}}
+
+usersRouter.get("/me/applied", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    // const jobs = await JobsModel.find({
+    //   applicants: [{ applicant: "623eb3e32079c1ace4ae3473" }],
+    // });
+    const jobs = await JobsModel.find({
+      applicants: {
+        $elemMatch: { applicant: req.user._id.toString() },
+      },
+    });
+
+    res.status(200).send(jobs);
+  } catch (error) {
+    next(error);
+  }
+});
 
 usersRouter.get("/me/jobs/:id", JWTAuthMiddleware, async (req, res, next) => {
   try {

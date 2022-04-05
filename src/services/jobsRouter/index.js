@@ -60,10 +60,26 @@ jobsRouter.get("/:id", async (req, res, next) => {
   try {
     const jobId = req.params.id;
 
-    const job = await JobsModel.findById(jobId).populate({
-      path: "user",
-      select: ["_id", "firstName", "lastName", "role", "email"],
-    });
+    const job = await JobsModel.findById(jobId)
+      .populate({
+        path: "user",
+        select: ["_id", "firstName", "lastName", "role", "email"],
+      })
+      .populate({
+        path: "applicants",
+        populate: {
+          path: "applicant",
+          model: "User",
+          select: [
+            "_id",
+            "firstName",
+            "lastName",
+            "image",
+            "myExperience",
+            "city",
+          ],
+        },
+      });
 
     if (job) {
       res.send(job);

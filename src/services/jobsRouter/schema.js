@@ -34,7 +34,6 @@ const jobsSchema = new Schema(
         applicant: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
-          unique: true,
         },
       },
     ],
