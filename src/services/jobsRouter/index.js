@@ -42,6 +42,15 @@ jobsRouter.get("/", async (req, res, next) => {
   }
 });
 
+jobsRouter.get("/titles", async (req, res, next) => {
+  try {
+    const authors = await JobsModel.find();
+    res.send(authors);
+  } catch (error) {
+    next(error);
+  }
+});
+
 jobsRouter.post("/", JWTAuthMiddleware, async (req, res, next) => {
   try {
     const newJob = new JobsModel({
