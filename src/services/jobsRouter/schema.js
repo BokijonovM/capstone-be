@@ -20,7 +20,7 @@ const jobsSchema = new Schema(
       enum: ["B2B", "Permanent"],
       default: "B2B",
     },
-    techStack: [{ skill: { type: String } }],
+    techStack: [{ skill: { type: String, unique: true } }],
     offers: [{ offer: { type: String } }],
     responsibilities: [{ responsibility: { type: String } }],
     requirements: [{ requirement: { type: String } }],
