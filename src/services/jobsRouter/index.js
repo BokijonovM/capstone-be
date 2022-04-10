@@ -31,7 +31,7 @@ jobsRouter.get("/", async (req, res, next) => {
           ],
         },
       })
-      .sort(mongoQuery.options.sort);
+      .sort({ createdAt: -1 });
     res.send(jobs);
   } catch (error) {
     next(
