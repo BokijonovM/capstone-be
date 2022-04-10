@@ -204,12 +204,134 @@ jobsRouter.get("/:id/tech", async (req, res, next) => {
     );
   }
 });
+jobsRouter.get("/:id/offer", async (req, res, next) => {
+  try {
+    const user = await JobsModel.findById(req.params.id);
+    if (user) {
+      res.send(user.offers);
+    } else {
+      next(createHttpError(404, `Profile with Id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(400, "Some errors occurred in profilerouter.get body!", {
+        message: error.message,
+      })
+    );
+  }
+});
+jobsRouter.get("/:id/responsibilities", async (req, res, next) => {
+  try {
+    const user = await JobsModel.findById(req.params.id);
+    if (user) {
+      res.send(user.responsibilities);
+    } else {
+      next(createHttpError(404, `Profile with Id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(400, "Some errors occurred in profilerouter.get body!", {
+        message: error.message,
+      })
+    );
+  }
+});
+jobsRouter.get("/:id/requirements", async (req, res, next) => {
+  try {
+    const user = await JobsModel.findById(req.params.id);
+    if (user) {
+      res.send(user.requirements);
+    } else {
+      next(createHttpError(404, `Profile with Id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(400, "Some errors occurred in profilerouter.get body!", {
+        message: error.message,
+      })
+    );
+  }
+});
 
 jobsRouter.post("/:id/tech", async (req, res, next) => {
   try {
     const updatedProfile = await JobsModel.findByIdAndUpdate(
       req.params.id,
       { $push: { techStack: req.body } },
+      { new: true }
+    );
+    if (updatedProfile) {
+      res.send(updatedProfile);
+    } else {
+      next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(
+        400,
+        "Some errors occurred in profileRouter.post experiences body!",
+        {
+          message: error.message,
+        }
+      )
+    );
+  }
+});
+jobsRouter.post("/:id/offer", async (req, res, next) => {
+  try {
+    const updatedProfile = await JobsModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { offers: req.body } },
+      { new: true }
+    );
+    if (updatedProfile) {
+      res.send(updatedProfile);
+    } else {
+      next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(
+        400,
+        "Some errors occurred in profileRouter.post experiences body!",
+        {
+          message: error.message,
+        }
+      )
+    );
+  }
+});
+
+jobsRouter.post("/:id/responsibilities", async (req, res, next) => {
+  try {
+    const updatedProfile = await JobsModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { responsibilities: req.body } },
+      { new: true }
+    );
+    if (updatedProfile) {
+      res.send(updatedProfile);
+    } else {
+      next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(
+        400,
+        "Some errors occurred in profileRouter.post experiences body!",
+        {
+          message: error.message,
+        }
+      )
+    );
+  }
+});
+
+jobsRouter.post("/:id/requirements", async (req, res, next) => {
+  try {
+    const updatedProfile = await JobsModel.findByIdAndUpdate(
+      req.params.id,
+      { $push: { requirements: req.body } },
       { new: true }
     );
     if (updatedProfile) {
