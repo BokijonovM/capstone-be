@@ -36,6 +36,9 @@ const jobsSchema = new Schema(
           ref: "User",
         },
       },
+      {
+        timestamps: true,
+      },
     ],
   },
   {
