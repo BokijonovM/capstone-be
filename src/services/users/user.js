@@ -224,23 +224,18 @@ usersRouter.post("/", async (req, res, next) => {
   }
 });
 
-usersRouter.get(
-  "/",
-  JWTAuthMiddleware,
-  adminOnlyMiddleware,
-  async (req, res, next) => {
-    try {
-      const user = await UsersModel.find();
-      res.send(user);
-    } catch (error) {
-      next(
-        createHttpError(400, "Some errors occurred in usersRouter body!", {
-          message: error.message,
-        })
-      );
-    }
+usersRouter.get("/", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const user = await UsersModel.find();
+    res.send(user);
+  } catch (error) {
+    next(
+      createHttpError(400, "Some errors occurred in usersRouter body!", {
+        message: error.message,
+      })
+    );
   }
-);
+});
 
 usersRouter.get(
   "/googleLogin",
@@ -273,5 +268,23 @@ usersRouter.get(
     }
   }
 );
+
+usersRouter.get("/:id", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const user = await UsersModel.findById(userId);
+    if (user) {
+      res.send(user);
+    } else {
+      res.send("user not found");
+    }
+  } catch (error) {
+    next(
+      createHttpError(400, "Some errors occurred in usersRouter body!", {
+        message: error.message,
+      })
+    );
+  }
+});
 
 export default usersRouter;

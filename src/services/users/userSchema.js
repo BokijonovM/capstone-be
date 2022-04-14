@@ -9,7 +9,11 @@ const userSchema = new Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String },
-    image: { type: String },
+    image: {
+      type: String,
+      default:
+        "https://th.bing.com/th/id/R.eb129b8ff6ef96fdd506bd73e3f5519e?rik=s7YZKeEj9XiOCQ&pid=ImgRaw&r=0",
+    },
     github: { type: String },
     linkedin: { type: String },
     aboutMe: { type: String },

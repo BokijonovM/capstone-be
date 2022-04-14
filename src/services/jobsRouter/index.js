@@ -188,6 +188,27 @@ jobsRouter.post("/:id/applicants", async (req, res, next) => {
   }
 });
 
+jobsRouter.get("/:id/applicants", async (req, res, next) => {
+  try {
+    const user = await JobsModel.findById(req.params.id);
+    if (user) {
+      res.send(user.applicants);
+    } else {
+      next(createHttpError(404, `Profile with Id ${req.params.id} not found!`));
+    }
+  } catch (error) {
+    next(
+      createHttpError(
+        400,
+        "Some errors occurred in jobsRouter.post experiences body!",
+        {
+          message: error.message,
+        }
+      )
+    );
+  }
+});
+
 jobsRouter.get("/:id/tech", async (req, res, next) => {
   try {
     const user = await JobsModel.findById(req.params.id);
