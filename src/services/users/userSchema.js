@@ -20,6 +20,7 @@ const userSchema = new Schema(
     myResume: { type: String },
     city: { type: String },
     phoneNumber: { type: String },
+    title: { type: String, default: "Developer" },
     role: { type: String, enum: ["User", "Admin"], default: "User" },
     myExperience: {
       type: String,
