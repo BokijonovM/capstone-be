@@ -3,6 +3,8 @@ import searchable from "mongoose-regex-search";
 
 const { Schema, model } = mongoose;
 
+const now = new Date();
+
 const jobsSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -35,6 +37,7 @@ const jobsSchema = new Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
+        createdAt: { type: Date, default: now },
       },
       {
         timestamps: true,

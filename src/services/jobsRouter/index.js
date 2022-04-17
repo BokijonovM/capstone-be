@@ -163,30 +163,34 @@ jobsRouter.delete("/:id", JWTAuthMiddleware, async (req, res, next) => {
   }
 });
 
-jobsRouter.post("/:id/applicants", async (req, res, next) => {
-  try {
-    const updatedProfile = await JobsModel.findByIdAndUpdate(
-      req.params.id,
-      { $push: { applicants: req.body } },
-      { new: true }
-    );
-    if (updatedProfile) {
-      res.send(updatedProfile);
-    } else {
-      next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+jobsRouter.post(
+  "/:id/applicants",
+  JWTAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const updatedProfile = await JobsModel.findByIdAndUpdate(
+        req.params.id,
+        { $push: { applicants: req.body } },
+        { new: true }
+      );
+      if (updatedProfile) {
+        res.send(updatedProfile);
+      } else {
+        next(createHttpError(404, `Job with id ${req.params.id} not found!`));
+      }
+    } catch (error) {
+      next(
+        createHttpError(
+          400,
+          "Some errors occurred in jobsRouter.post experiences body!",
+          {
+            message: error.message,
+          }
+        )
+      );
     }
-  } catch (error) {
-    next(
-      createHttpError(
-        400,
-        "Some errors occurred in jobsRouter.post experiences body!",
-        {
-          message: error.message,
-        }
-      )
-    );
   }
-});
+);
 
 jobsRouter.get("/:id/applicants", async (req, res, next) => {
   try {
