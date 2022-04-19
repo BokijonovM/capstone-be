@@ -14,7 +14,7 @@ jobsRouter.get("/", async (req, res, next) => {
     const jobs = await JobsModel.find(mongoQuery.criteria)
       .populate({
         path: "user",
-        select: ["_id", "firstName", "lastName", "role", "email"],
+        select: ["_id", "firstName", "lastName", "role", "email", "image"],
       })
       .populate({
         path: "applicants",
