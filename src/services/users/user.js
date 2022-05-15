@@ -111,6 +111,7 @@ usersRouter.get("/me/companies", JWTAuthMiddleware, async (req, res, next) => {
 
     res.status(200).send(jobs);
   } catch (error) {
+    console.log(error)
     next(error);
   }
 });

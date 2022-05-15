@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import searchable from "mongoose-regex-search";
 
 const { Schema, model } = mongoose;
 
@@ -8,9 +7,9 @@ const now = new Date();
 const jobsSchema = new Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
-    companyName: { type: String, required: true },
-    location: { type: String, required: true },
+    description: { type: String },
+    companyName: { type: String },
+    location: { type: String },
     salary: { type: String },
     experience: {
       type: String,
@@ -23,6 +22,7 @@ const jobsSchema = new Schema(
       default: "B2B",
     },
     techStack: [{ skill: { type: String, unique: true } }],
+    techs: { type: String },
     offers: [{ offer: { type: String } }],
     responsibilities: [{ responsibility: { type: String } }],
     requirements: [{ requirement: { type: String } }],
